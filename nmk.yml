@@ -1,0 +1,23 @@
+refs:
+    - pip://nmk-badges!plugin.yml
+    - pip://nmk-github!plugin.yml
+    - pip://nmk-python!plugin.yml
+    - pip://nmk-doc!plugin.yml
+    - pip://nmk-vscode!plugin.yml
+
+config:
+    # Python package
+    pythonPackage: nmk-workspace
+    
+    # Nmk dependencies
+    pythonPackageRequirements:
+        - nmk-base
+
+    # Extra project data
+    pythonProjectFileItems:
+        project:
+            description: VWorkspace handling plugin for nmk build system
+
+    # Github issues logged in nmk project
+    githubIssuesRepo: nmk
+    githubIssuesLabel: "plugin:workspace"
