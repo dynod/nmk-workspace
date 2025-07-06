@@ -1,0 +1,4 @@
+config:
+  pythonPackage: baz
+  venvPkgDeps:
+    - bar

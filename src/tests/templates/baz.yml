@@ -1,0 +1,5 @@
+config:
+  pythonPackage: baz
+  venvPkgDeps:
+    - blablabla
+    - other-meaningless-dep3 == 789

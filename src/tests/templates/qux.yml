@@ -1,0 +1,5 @@
+config:
+  pythonPackage: qux
+  venvPkgDeps:
+    - baz
+    - bar if platform_system == "linux"
