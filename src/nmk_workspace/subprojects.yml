@@ -4,3 +4,12 @@ config:
     __resolver__: nmk_workspace.resolvers.SubProjectsResolver
     params:
       root: ${PROJECTDIR}
+
+  # nmk python subprojects, sorted by dependency order
+  workspacePythonSubProjects:
+    __resolver__: nmk_workspace.resolvers.FilteredProjectsResolver
+    params:
+      root: ${PROJECTDIR}
+      all_sub_projects: ${workspaceSubProjects}
+      artifact_name_item: pythonPackage
+      dependencies_item: venvPkgDeps

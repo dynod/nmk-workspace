@@ -1,0 +1,5 @@
+config:
+  pythonPackage: bar
+  venvPkgDeps:
+    - baz>=456
+    - other-meaningless-dep
