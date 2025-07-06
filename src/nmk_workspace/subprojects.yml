@@ -1,0 +1,6 @@
+config:
+  # nmk subprojects found in git submodules
+  workspaceSubProjects:
+    __resolver__: nmk_workspace.resolvers.SubProjectsResolver
+    params:
+      root: ${PROJECTDIR}

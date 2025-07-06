@@ -1,6 +1,7 @@
 # Workspace plugin definition
 refs:
     - pip://nmk-base!plugin.yml
+    - subprojects.yml
 
 config:
     # Plugin version
