@@ -6,7 +6,7 @@ from pathlib import Path
 
 from nmk.logs import NmkLogger
 from nmk.model.resolver import NmkListConfigResolver
-from nmk.utils import is_windows, run_with_logs
+from nmk.utils import run_with_logs
 
 
 class SubProjectsResolver(NmkListConfigResolver):
@@ -27,7 +27,9 @@ class SubProjectsResolver(NmkListConfigResolver):
 
         # Ask git for submodules paths
         root_path = Path(root)
-        cp = run_with_logs(["git", "submodule", "foreach", "--quiet", "--recursive", f"echo {'%sm_path%' if is_windows() else '$sm_path'}"], cwd=root_path)
+        cp = run_with_logs(
+            ["git", "submodule", "foreach", "--quiet", "--recursive", "echo $sm_path"], cwd=root_path
+        )  # Note that $sm_path is a git variable, meaning this syntax is supported both on Linux and Windows
         nmk_models = []
         for candidate in cp.stdout.splitlines(keepends=False):
             # Only keep ones with a default nmk model file
