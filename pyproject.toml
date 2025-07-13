@@ -13,14 +13,22 @@ dependencies = ["nmk-base"]
 description = "VWorkspace handling plugin for nmk build system"
 
 [[project.authors]]
-name = "Project Author"
+name = "The dynod project"
 
 [[project.maintainers]]
-name = "Project Author"
+name = "The dynod project"
 
 [project.readme]
 file = "README.md"
 content-type = "text/markdown"
+
+[project.license]
+text = "MIT License"
+
+[project.urls]
+Homepage = "https://github.com/dynod/nmk-workspace"
+Repository = "https://github.com/dynod/nmk-workspace"
+Issues = "https://github.com/dynod/nmk/issues?q=is%3Aopen+is%3Aissue+label%3Aplugin%3Aworkspace"
 
 [tool.setuptools.packages.find]
 where = ["src"]

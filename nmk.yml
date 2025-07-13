@@ -4,6 +4,10 @@ refs:
     - pip://nmk-python!plugin.yml
     - pip://nmk-doc!plugin.yml
     - pip://nmk-vscode!plugin.yml
+    - <workspace>/shared.yml
+    - workspace:
+        local: ../../../../shared
+        remote: github://dynod/workspace/main/shared
 
 config:
     # Python package

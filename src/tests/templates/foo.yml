@@ -1,0 +1,12 @@
+refs:
+  - pip://nmk-base!plugin.yml
+
+tasks:
+  # Failing test task
+  failing_test:
+    description: Failing test task
+    emoji: ":x:"
+    builder: nmk_base.common.ProcessBuilder
+    params:
+      cmd: someUnknownCommand
+    appendToDeps: tests

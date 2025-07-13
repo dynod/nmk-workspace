@@ -1,3 +1,5 @@
+import json
+import shutil
 from pathlib import Path
 
 from nmk.tests.tester import NmkBaseTester
@@ -31,3 +33,41 @@ class TestWorkspacePlugin(NmkBaseTester):
                 'Config dump: { "workspaceSubProjects": [ "some/sub/folder" ] }',
             ]
         )
+
+    def run_workspace_task(self, task: str, extra_config: dict = None, expected_rc: int = 0) -> Path:
+        sub_projects = ["libs/foo", "tools/bar"]
+        for sub_project in sub_projects:
+            sub_p_folder = self.test_folder / sub_project
+            sub_p_folder.mkdir(parents=True, exist_ok=True)
+            shutil.copy(self.template(f"{sub_p_folder.name}.yml"), sub_p_folder / "nmk.yml")
+
+        p = self.prepare_project("ref_workspace.yml")
+        whole_extra_config = {"workspaceSubProjects": sub_projects, "workspaceBuildExtraArgs": "--skip setup"}
+        if extra_config:
+            whole_extra_config.update(extra_config)
+        self.nmk(p, extra_args=[task, "--skip", "setup", "--config", json.dumps(whole_extra_config)], expected_rc=expected_rc)
+
+    def test_subprojects_clean(self):
+        self.run_workspace_task("clean")
+
+    def test_subprojects_package(self):
+        self.run_workspace_task("package")
+
+    def test_subprojects_tests_default(self):
+        self.run_workspace_task("tests")
+
+        # Some tests are expected to fail, but without raising an error
+        self.check_logs("!! Failed to build sub-project: libs/foo !!")
+
+    def test_subprojects_tests_explode(self):
+        self.run_workspace_task("tests", {"workspaceBuildIgnoreFailures": {"tests": False}}, expected_rc=1)
+
+        # Some tests are expected to fail, but without raising an error
+        self.check_logs("!! Failed to build sub-project: libs/foo !!")
+
+    def test_subprojects_clean_duplicate(self):
+        self.run_workspace_task("clean", {"workspaceSubProjects": ["libs/foo", "libs/foo"]})
+
+    def test_subprojects_clean_exclude(self):
+        self.run_workspace_task("clean", {"workspaceSubProjectsToExclude": ["libs/foo"]})
+        self.check_logs(">> skipped (excluded)")

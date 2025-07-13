@@ -7,8 +7,8 @@
 
 # Project information
 project = "nmk-workspace"
-copyright = "2025, Project Author"
-author = "Project Author"
+copyright = "2025, The dynod project"
+author = "The dynod project"
 
 # Extensions configuration
 extensions = ["autoapi.extension", "myst_parser", "sphinx_rtd_theme"]
