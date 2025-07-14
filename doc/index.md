@@ -6,6 +6,8 @@ This plugin helps to recursively trigger tasks in subprojects (i.e. usually proj
 :caption: 'Contents'
 :maxdepth: 2
 usage
+tasks
+extend
 config
 contribs
 ```

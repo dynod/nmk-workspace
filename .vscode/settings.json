@@ -21,7 +21,11 @@
         "sdist",
         "venv",
         "pyproject",
-        "rtype"
+        "rtype",
+        "dynod",
+        "nmk",
+        "pypi",
+        "buildenv"
     ],
     "python.analysis.extraPaths": [
         "src"
@@ -54,5 +58,10 @@
                 ".buildenv\\shell.cmd"
             ]
         }
-    }
+    },
+    "cSpell.allowCompoundWords": true,
+    "cSpell.enableFiletypes": [
+        "yaml",
+        "python"
+    ]
 }
