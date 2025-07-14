@@ -69,7 +69,9 @@ class SubProjectsBuilder(NmkTaskBuilder):
 
             # Delegate build
             sub_project_path = Path(root) / sub_project
-            cp = subprocess.run(["nmk"] + args_list, cwd=sub_project_path)
+            nmk_args = ["nmk", "--log-prefix", f"{sub_project}/"] + args_list
+            self.logger.debug(">> Running command: " + " ".join(nmk_args))
+            cp = subprocess.run(nmk_args, cwd=sub_project_path)
 
             # Handle build failure
             if cp.returncode != 0:
