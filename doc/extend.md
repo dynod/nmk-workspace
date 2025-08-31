@@ -42,3 +42,18 @@ These config items can also be used to condition the subprojects build behavior:
   workspaceBuildIgnoreFailures:
       tests: false # Any failed test of any sub-project will make the full workspace test fail
   ```
+
+## Build extra options
+
+These config items can be used to configure extra **nmk** command options when building subprojects:
+* **{ref}`${workspaceBuildExtraArgs}<workspaceBuildExtraArgs>`**: Extra options used for *all* nmk subprojects builds
+  Example:
+  ```yaml
+  workspaceBuildExtraArgs: --skip git.dirty # Don't check for git dirty files when building subprojects
+  ```
+* **{ref}`${workspaceBuildExtraArgsByStage}<workspaceBuildExtraArgsByStage>`**: Specific extra options for meta-tasks
+  Example:
+  ```yaml
+  workspaceBuildExtraArgsByStage:
+      package: --skip build # Don't trigger build again when calling package meta-task on subprojects
+  ```

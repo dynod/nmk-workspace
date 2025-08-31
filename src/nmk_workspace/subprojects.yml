@@ -11,7 +11,7 @@ config:
   # Ordered list of subprojects to build after the other subprojects
   workspaceSubProjectsToBuildAfter: []
 
-  # Detected list of subprojects to build
+  # Detected list of all subprojects to build
   workspaceSubProjectsToBuild:
     - ${workspaceSubProjects}
 
@@ -20,6 +20,14 @@ config:
 
   # Extra args to be applied to all commands
   workspaceBuildExtraArgs: ""
+
+  # Extra args specific to each command stage
+  workspaceBuildExtraArgsByStage:
+    clean: ""
+    setup: ""
+    build: ""
+    tests: ""
+    package: ""
 
   # Enabling options per task
   workspaceBuildEnabled:
@@ -51,7 +59,7 @@ tasks:
       to_build: ${workspaceSubProjectsToBuild}
       to_build_after: ${workspaceSubProjectsToBuildAfter}
       excluded: ${workspaceSubProjectsToExclude}
-      args: clean ${workspaceBuildExtraArgs}
+      args: clean ${workspaceBuildExtraArgs} ${workspaceBuildExtraArgsByStage.clean}
       ignore_failures: ${workspaceBuildIgnoreFailures.clean}
 
   # Workspace setup
@@ -67,7 +75,7 @@ tasks:
       to_build: ${workspaceSubProjectsToBuild}
       to_build_after: ${workspaceSubProjectsToBuildAfter}
       excluded: ${workspaceSubProjectsToExclude}
-      args: setup ${workspaceBuildExtraArgs}
+      args: setup ${workspaceBuildExtraArgs} ${workspaceBuildExtraArgsByStage.setup}
       ignore_failures: ${workspaceBuildIgnoreFailures.setup}
 
   # Workspace build
@@ -83,7 +91,7 @@ tasks:
       to_build: ${workspaceSubProjectsToBuild}
       to_build_after: ${workspaceSubProjectsToBuildAfter}
       excluded: ${workspaceSubProjectsToExclude}
-      args: build ${workspaceBuildExtraArgs}
+      args: build ${workspaceBuildExtraArgs} ${workspaceBuildExtraArgsByStage.build}
       ignore_failures: ${workspaceBuildIgnoreFailures.build}
 
   # Workspace tests
@@ -99,7 +107,7 @@ tasks:
       to_build: ${workspaceSubProjectsToBuild}
       to_build_after: ${workspaceSubProjectsToBuildAfter}
       excluded: ${workspaceSubProjectsToExclude}
-      args: tests ${workspaceBuildExtraArgs}
+      args: tests ${workspaceBuildExtraArgs} ${workspaceBuildExtraArgsByStage.tests}
       ignore_failures: ${workspaceBuildIgnoreFailures.tests}
 
   # Workspace package
@@ -115,5 +123,5 @@ tasks:
       to_build: ${workspaceSubProjectsToBuild}
       to_build_after: ${workspaceSubProjectsToBuildAfter}
       excluded: ${workspaceSubProjectsToExclude}
-      args: package ${workspaceBuildExtraArgs}
+      args: package ${workspaceBuildExtraArgs} ${workspaceBuildExtraArgsByStage.package}
       ignore_failures: ${workspaceBuildIgnoreFailures.package}

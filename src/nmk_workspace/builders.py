@@ -17,7 +17,7 @@ class SubProjectsBuilder(NmkTaskBuilder):
     This builder is used to iterate on workspace sub-projects and trigger nmk build for each.
     """
 
-    def build(
+    def build(  # type: ignore
         self,
         root: str,
         to_build_first: list[str],
@@ -32,7 +32,7 @@ class SubProjectsBuilder(NmkTaskBuilder):
 
         :param root: Root path of the workspace
         :param to_build_first: List of sub-projects paths to build first
-        :param to_build: List of sub-projects paths to build then
+        :param to_build: List of all sub-projects paths to be built (including the ones in to_build_first and to_build_after)
         :param to_build_after: List of sub-projects paths to build after all the others
         :param excluded: List of sub-projects glob patterns to exclude from building
         :param args: List of nmk args to use for each sub-project
@@ -43,13 +43,13 @@ class SubProjectsBuilder(NmkTaskBuilder):
         args_list = args if isinstance(args, list) else [a for a in args.split(" ") if a]
 
         # Prepare global list of sub-projects to be built
-        sub_projects = []
-        sub_projects.extend(to_build_first)
+        sub_projects: list[str] = []
+        sub_projects.extend([p for p in to_build_first if p in to_build])
         sub_projects.extend([p for p in to_build if p not in to_build_after])
-        sub_projects.extend(to_build_after)
+        sub_projects.extend([p for p in to_build_after if p in to_build])
 
         # Iterate on sub-projects
-        built_projects = set()
+        built_projects: set[str] = set()
         for sub_project in sub_projects:
             # Handle duplicates
             if sub_project in built_projects:

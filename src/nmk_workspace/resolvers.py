@@ -3,10 +3,12 @@ Nmk workspace plugin config item resolvers.
 """
 
 from pathlib import Path
+from subprocess import CompletedProcess
+from typing import cast
 
 from nmk.logs import NmkLogger
 from nmk.model.resolver import NmkListConfigResolver
-from nmk.utils import run_with_logs
+from nmk.utils import run_with_logs  # type: ignore
 
 
 class SubProjectsResolver(NmkListConfigResolver):
@@ -17,7 +19,7 @@ class SubProjectsResolver(NmkListConfigResolver):
     (other behaviors may be implemented if needed later).
     """
 
-    def get_value(self, name: str, root: str) -> list[str]:
+    def get_value(self, name: str, root: str) -> list[str]:  # type: ignore
         """
         Resolver for sub-projects list.
 
@@ -27,10 +29,10 @@ class SubProjectsResolver(NmkListConfigResolver):
 
         # Ask git for submodules paths
         root_path = Path(root)
-        cp = run_with_logs(
-            ["git", "submodule", "foreach", "--quiet", "--recursive", "echo $sm_path"], cwd=root_path
+        cp = cast(
+            CompletedProcess[str], run_with_logs(["git", "submodule", "foreach", "--quiet", "--recursive", "echo $sm_path"], cwd=root_path)
         )  # Note that $sm_path is a git variable, meaning this syntax is supported both on Linux and Windows
-        nmk_models = []
+        nmk_models: list[str] = []
         for candidate in cp.stdout.splitlines(keepends=False):
             # Only keep ones with a default nmk model file
             sub_project_path = candidate.strip()
