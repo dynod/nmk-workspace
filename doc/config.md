@@ -31,6 +31,12 @@ This configuration items are used to parameterize how workspace subprojects are 
 This list is used by the subprojects builder to identify which projects need to be built first, and in which order. Subprojects path are provided relatively to
 the workspace root.
 
+```{note}
+Projects in this list that are not referenced in {ref}`${workspaceSubProjectsToBuild}<workspaceSubProjectsToBuild>` will be ignored.
+
+*<span style="color:orange">Behavior changed in version 1.1.0</span>*
+```
+
 (workspaceSubProjectsToBuild)=
 ### **`workspaceSubProjectsToBuild`** -- list of subprojects to build
 
@@ -38,9 +44,12 @@ the workspace root.
 |-     |-
 | list[str]  | {ref}`${workspaceSubProjects}<workspaceSubProjects>`
 
-This list is used by the subprojects builder to identify which projects need to be built, after the {ref}`${workspaceSubProjectsToBuildFirst}<workspaceSubProjectsToBuildFirst>` ones, and before the {ref}`${workspaceSubProjectsToBuildAfter}<workspaceSubProjectsToBuildAfter>` ones. Subprojects path are provided relatively to the workspace root.
+This list is used by the subprojects builder to identify all projects that need to be built.
+Projects in this list will be built after the {ref}`${workspaceSubProjectsToBuildFirst}<workspaceSubProjectsToBuildFirst>` ones, and before the {ref}`${workspaceSubProjectsToBuildAfter}<workspaceSubProjectsToBuildAfter>` ones. Subprojects path are provided relatively to the workspace root.
 
-Note that projects in this list that are also referenced in {ref}`${workspaceSubProjectsToBuildAfter}<workspaceSubProjectsToBuildAfter>` will be automatically ignored.
+```{note}
+Projects in this list that are also referenced in {ref}`${workspaceSubProjectsToBuildAfter}<workspaceSubProjectsToBuildAfter>` will be automatically ignored.
+```
 
 (workspaceSubProjectsToBuildAfter)=
 ### **`workspaceSubProjectsToBuildAfter`** -- ordered list of subprojects to build after all the others
@@ -51,6 +60,12 @@ Note that projects in this list that are also referenced in {ref}`${workspaceSub
 
 This list is used by the subprojects builder to identify which projects need to be built after all the other ones, and in which order. Subprojects path are provided relatively to
 the workspace root.
+
+```{note}
+Projects in this list that are not referenced in {ref}`${workspaceSubProjectsToBuild}<workspaceSubProjectsToBuild>` will be ignored.
+
+*<span style="color:orange">Behavior changed in version 1.1.0</span>*
+```
 
 (workspaceSubProjectsToExclude)=
 ### **`workspaceSubProjectsToExclude`** -- list of subprojects patterns to be ignored
@@ -69,6 +84,17 @@ When iterating over projects to be built, the subprojects builder will ignore on
 | str  | ""
 
 This string will be appended to the **`nmk`** command used to build subprojects. E.g. this can be usefull to ignore specific tasks.
+
+(workspaceBuildExtraArgsByStage)=
+### **`workspaceBuildExtraArgsByStage`** -- nmk command extra args for subprojects build
+
+| Type | Default value |
+|-     |-
+| str  | "" for all commands
+
+This string will be appended to the **`nmk`** command used to build subprojects, specifically for each metacommand defined by this plugin.
+
+*<span style="color:green">Added in version 1.1.0</span>*
 
 (workspaceBuildEnabled)=
 ### **`workspaceBuildEnabled`** -- meta-commands enablement for subprojects build

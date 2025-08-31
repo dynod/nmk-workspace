@@ -1,6 +1,7 @@
 import json
 import shutil
 from pathlib import Path
+from typing import Any, Union
 
 from nmk.tests.tester import NmkBaseTester
 from nmk.utils import run_with_logs
@@ -34,7 +35,7 @@ class TestWorkspacePlugin(NmkBaseTester):
             ]
         )
 
-    def run_workspace_task(self, task: str, extra_config: dict = None, expected_rc: int = 0) -> Path:
+    def run_workspace_task(self, task: str, extra_config: Union[dict[str, Any], None] = None, expected_rc: int = 0):
         sub_projects = ["libs/foo", "tools/bar"]
         for sub_project in sub_projects:
             sub_p_folder = self.test_folder / sub_project
