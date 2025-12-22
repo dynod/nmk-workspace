@@ -113,3 +113,14 @@ This dict allows to enable/disable different metacommands defined by this plugin
 | dict[str, bool]  | false for all commands, except for "tests"
 
 This dict allows to tell builder to ignore any failures occurring when building a subproject.
+
+(workspaceDisableLocalTasks)=
+### **`workspaceDisableLocalTasks`** -- local build disablement for subprojects build
+
+| Type | Default value |
+|-     |-
+| bool | [**`${isLocalBuild}`**](https://nmk-base.readthedocs.io/en/stable/config.html#islocalbuild)
+
+This item disables all subprojects builds if the project is built locally (no effect in CI).
+
+*<span style="color:green">Added in version 1.2.0</span>*

@@ -46,7 +46,11 @@ class TestWorkspacePlugin(NmkBaseTester):
         whole_extra_config = {"workspaceSubProjects": sub_projects, "workspaceBuildExtraArgs": "--skip setup"}
         if extra_config:
             whole_extra_config.update(extra_config)
-        self.nmk(p, extra_args=[task, "--skip", "setup", "--config", json.dumps(whole_extra_config)], expected_rc=expected_rc)
+        self.nmk(
+            p,
+            extra_args=[task, "--skip", "setup", "--config", json.dumps(whole_extra_config), "--config", "workspaceDisableLocalTasks=false"],
+            expected_rc=expected_rc,
+        )
 
     def test_subprojects_clean(self):
         self.run_workspace_task("clean")

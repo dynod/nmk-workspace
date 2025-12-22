@@ -15,6 +15,7 @@ This task iterates on specified subprojects, and call their own [**`setup`**](ht
 |-         |-
 | builder           | {py:class}`nmk_workspace.builders.SubProjectsBuilder`
 | if                | {ref}`${workspaceBuildEnabled.setup}<workspaceBuildEnabled>`
+| unless            | {ref}`${workspaceDisableLocalTasks}<workspaceDisableLocalTasks>`<br> <br>*<span style="color:green">Added in version 1.2.0</span>*
 | root              | [**`${PROJECTDIR}`**](https://nmk.readthedocs.io/en/stable/file.html#built-in-config-items)
 | to_build_first    | {ref}`${workspaceSubProjectsToBuildFirst}<workspaceSubProjectsToBuildFirst>`
 | to_build          | {ref}`${workspaceSubProjectsToBuild}<workspaceSubProjectsToBuild>`
@@ -37,6 +38,7 @@ This task iterates on specified subprojects, and call their own [**`build`**](ht
 |-         |-
 | builder           | {py:class}`nmk_workspace.builders.SubProjectsBuilder`
 | if                | {ref}`${workspaceBuildEnabled.build}<workspaceBuildEnabled>`
+| unless            | {ref}`${workspaceDisableLocalTasks}<workspaceDisableLocalTasks>`<br> <br>*<span style="color:green">Added in version 1.2.0</span>*
 | root              | [**`${PROJECTDIR}`**](https://nmk.readthedocs.io/en/stable/file.html#built-in-config-items)
 | to_build_first    | {ref}`${workspaceSubProjectsToBuildFirst}<workspaceSubProjectsToBuildFirst>`
 | to_build          | {ref}`${workspaceSubProjectsToBuild}<workspaceSubProjectsToBuild>`
@@ -59,6 +61,7 @@ This task iterates on specified subprojects, and call their own [**`tests`**](ht
 |-         |-
 | builder           | {py:class}`nmk_workspace.builders.SubProjectsBuilder`
 | if                | {ref}`${workspaceBuildEnabled.tests}<workspaceBuildEnabled>`
+| unless            | {ref}`${workspaceDisableLocalTasks}<workspaceDisableLocalTasks>`<br> <br>*<span style="color:green">Added in version 1.2.0</span>*
 | root              | [**`${PROJECTDIR}`**](https://nmk.readthedocs.io/en/stable/file.html#built-in-config-items)
 | to_build_first    | {ref}`${workspaceSubProjectsToBuildFirst}<workspaceSubProjectsToBuildFirst>`
 | to_build          | {ref}`${workspaceSubProjectsToBuild}<workspaceSubProjectsToBuild>`
@@ -81,6 +84,7 @@ This task iterates on specified subprojects, and call their own [**`package`**](
 |-         |-
 | builder           | {py:class}`nmk_workspace.builders.SubProjectsBuilder`
 | if                | {ref}`${workspaceBuildEnabled.package}<workspaceBuildEnabled>`
+| unless            | {ref}`${workspaceDisableLocalTasks}<workspaceDisableLocalTasks>`<br> <br>*<span style="color:green">Added in version 1.2.0</span>*
 | root              | [**`${PROJECTDIR}`**](https://nmk.readthedocs.io/en/stable/file.html#built-in-config-items)
 | to_build_first    | {ref}`${workspaceSubProjectsToBuildFirst}<workspaceSubProjectsToBuildFirst>`
 | to_build          | {ref}`${workspaceSubProjectsToBuild}<workspaceSubProjectsToBuild>`
@@ -103,6 +107,7 @@ This task iterates on specified subprojects, and call their own [**`clean`**](ht
 |-         |-
 | builder           | {py:class}`nmk_workspace.builders.SubProjectsBuilder`
 | if                | {ref}`${workspaceBuildEnabled.clean}<workspaceBuildEnabled>`
+| unless            | {ref}`${workspaceDisableLocalTasks}<workspaceDisableLocalTasks>`<br> <br>*<span style="color:green">Added in version 1.2.0</span>*
 | root              | [**`${PROJECTDIR}`**](https://nmk.readthedocs.io/en/stable/file.html#built-in-config-items)
 | to_build_first    | {ref}`${workspaceSubProjectsToBuildFirst}<workspaceSubProjectsToBuildFirst>`
 | to_build          | {ref}`${workspaceSubProjectsToBuild}<workspaceSubProjectsToBuild>`
