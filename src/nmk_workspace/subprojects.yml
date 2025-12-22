@@ -45,6 +45,9 @@ config:
     tests: true
     package: false
 
+  # Disable local workspace tasks
+  workspaceDisableLocalTasks: ${isLocalBuild}
+
 tasks:
   # Workspace clean
   workspace.clean:
@@ -52,6 +55,7 @@ tasks:
     emoji: ":books:.:broom:"
     builder: nmk_workspace.builders.SubProjectsBuilder
     if: ${workspaceBuildEnabled.clean}
+    unless: ${workspaceDisableLocalTasks}
     appendToDeps: clean
     params:
       root: ${PROJECTDIR}
@@ -68,6 +72,7 @@ tasks:
     emoji: ":books:.:airplane_departure:"
     builder: nmk_workspace.builders.SubProjectsBuilder
     if: ${workspaceBuildEnabled.setup}
+    unless: ${workspaceDisableLocalTasks}
     appendToDeps: setup
     params:
       root: ${PROJECTDIR}
@@ -84,6 +89,7 @@ tasks:
     emoji: ":books:.:hammer_and_wrench: "
     builder: nmk_workspace.builders.SubProjectsBuilder
     if: ${workspaceBuildEnabled.build}
+    unless: ${workspaceDisableLocalTasks}
     appendToDeps: build
     params:
       root: ${PROJECTDIR}
@@ -100,6 +106,7 @@ tasks:
     emoji: ":books:.:crossed_fingers:"
     builder: nmk_workspace.builders.SubProjectsBuilder
     if: ${workspaceBuildEnabled.tests}
+    unless: ${workspaceDisableLocalTasks}
     appendToDeps: tests
     params:
       root: ${PROJECTDIR}
@@ -116,6 +123,7 @@ tasks:
     emoji: ":books:.:package:"
     builder: nmk_workspace.builders.SubProjectsBuilder
     if: ${workspaceBuildEnabled.package}
+    unless: ${workspaceDisableLocalTasks}
     appendToDeps: package
     params:
       root: ${PROJECTDIR}
