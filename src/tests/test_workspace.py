@@ -1,10 +1,12 @@
 import json
 import shutil
+import subprocess
 from pathlib import Path
 from typing import Any, Union
 
+import pytest
 from nmk.tests.tester import NmkBaseTester
-from nmk.utils import run_with_logs
+from nmk.utils import run_with_logs  # type: ignore
 
 
 class TestWorkspacePlugin(NmkBaseTester):
@@ -43,7 +45,7 @@ class TestWorkspacePlugin(NmkBaseTester):
             shutil.copy(self.template(f"{sub_p_folder.name}.yml"), sub_p_folder / "nmk.yml")
 
         p = self.prepare_project("ref_workspace.yml")
-        whole_extra_config = {"workspaceSubProjects": sub_projects, "workspaceBuildExtraArgs": "--skip setup"}
+        whole_extra_config = {"workspaceSubProjects": sub_projects, "workspaceSubModules": sub_projects, "workspaceBuildExtraArgs": "--skip setup"}
         if extra_config:
             whole_extra_config.update(extra_config)
         self.nmk(
@@ -76,3 +78,20 @@ class TestWorkspacePlugin(NmkBaseTester):
     def test_subprojects_clean_exclude(self):
         self.run_workspace_task("clean", {"workspaceSubProjectsToExclude": ["libs/foo"]})
         self.check_logs(">> skipped (excluded)")
+
+    def test_subprojects_sync(self):
+        self.run_workspace_task("workspace.sync")
+        self.check_logs(["INFO 📚.🔄 - >> libs/foo: ", "INFO 📚.🔄 - >> tools/bar: "])
+
+    def test_subprojects_sync_unknown_branch(self, monkeypatch: pytest.MonkeyPatch):
+        real_run = subprocess.run
+
+        def fake_git(args: list[str], *other_args: Any, **kwargs: Any) -> subprocess.CompletedProcess[str]:
+            if args[:2] == ["git", "for-each-ref"]:
+                return subprocess.CompletedProcess(args, 1, "", "error: refname not found\n")
+            return real_run(args, *other_args, **kwargs)  # type: ignore
+
+        monkeypatch.setattr(subprocess, "run", fake_git)
+
+        self.run_workspace_task("workspace.sync")
+        self.check_logs(["WARNING ❗ - >> libs/foo: unknown branch, skipping checkout", "WARNING ❗ - >> tools/bar: unknown branch, skipping checkout"])

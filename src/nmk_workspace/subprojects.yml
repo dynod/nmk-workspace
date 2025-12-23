@@ -5,6 +5,13 @@ config:
     params:
       root: ${PROJECTDIR}
 
+  # all found git submodules
+  workspaceSubModules:
+    __resolver__: nmk_workspace.resolvers.SubProjectsResolver
+    params:
+      root: ${PROJECTDIR}
+      only_nmk_projects: false
+
   # Ordered list of subprojects to build first
   workspaceSubProjectsToBuildFirst: []
   
@@ -49,6 +56,15 @@ config:
   workspaceDisableLocalTasks: ${isLocalBuild}
 
 tasks:
+  # Workspace sync
+  workspace.sync:
+    description: Sync workspace projects
+    emoji: ":books:.:arrows_counterclockwise:"
+    builder: nmk_workspace.builders.SubProjectsSyncBuilder
+    params:
+      root: ${PROJECTDIR}
+      to_sync: ${workspaceSubModules}
+
   # Workspace clean
   workspace.clean:
     description: Clean workspace projects
