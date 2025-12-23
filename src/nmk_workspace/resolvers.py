@@ -19,11 +19,12 @@ class SubProjectsResolver(NmkListConfigResolver):
     (other behaviors may be implemented if needed later).
     """
 
-    def get_value(self, name: str, root: str) -> list[str]:  # type: ignore
+    def get_value(self, name: str, root: str, only_nmk_projects: bool = True) -> list[str]:  # type: ignore
         """
         Resolver for sub-projects list.
 
-        :root: root path of the workspace
+        :param root: root path of the workspace
+        :param only_nmk_projects: if True (default), only return sub-projects having a default nmk project file (nmk.yml)
         :return: list of sub-projects paths relative to the workspace root
         """
 
@@ -37,7 +38,7 @@ class SubProjectsResolver(NmkListConfigResolver):
             # Only keep ones with a default nmk model file
             sub_project_path = candidate.strip()
             candidate_path = root_path / sub_project_path / "nmk.yml"
-            if candidate_path.is_file():
+            if (not only_nmk_projects) or candidate_path.is_file():
                 nmk_models.append(sub_project_path)
             else:
                 NmkLogger.debug(f"Sub-project {sub_project_path} does not have a default nmk model file, skipping it.")

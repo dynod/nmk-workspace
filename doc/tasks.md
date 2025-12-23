@@ -115,3 +115,18 @@ This task iterates on specified subprojects, and call their own [**`clean`**](ht
 | excluded          | {ref}`${workspaceSubProjectsToExclude}<workspaceSubProjectsToExclude>`
 | args              | clean {ref}`${workspaceBuildExtraArgs}<workspaceBuildExtraArgs>`
 | ignore_failures   | {ref}`${workspaceBuildIgnoreFailures.clean}<workspaceBuildIgnoreFailures>`
+
+## Other tasks
+
+(workspace.sync)=
+### **`workspace.sync`** -- submodules synchronization
+
+This task triggers a recursive submodules update process, and checks out the corresponding branch (i.e. the remote branch identified in **.gitmodules** root file) for each submodule.
+
+| Property | Value/description |
+|-         |-
+| builder           | {py:class}`nmk_workspace.builders.SubProjectsSyncBuilder`
+| root              | [**`${PROJECTDIR}`**](https://nmk.readthedocs.io/en/stable/file.html#built-in-config-items)
+| to_sync          | {ref}`${workspaceSubModules}<workspaceSubModules>`
+
+*<span style="color:green">Added in version 1.2.0</span>*

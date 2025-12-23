@@ -8,6 +8,45 @@ from pathlib import Path
 from typing import Union
 
 from nmk.model.builder import NmkTaskBuilder
+from nmk.utils import run_with_logs  # type: ignore
+
+
+class SubProjectsSyncBuilder(NmkTaskBuilder):
+    """
+    Builder for syncing sub-projects in the workspace tree.
+    """
+
+    def build(self, root: str, to_sync: list[str]):  # type: ignore
+        """
+        Synchronizes all sub-modules on their git remote branch (the one declared in the .gitmodules file).
+
+        :param root: Root path of the workspace
+        :param to_sync: List of sub-modules to sync
+        """
+
+        # Build root path
+        root_path = Path(root)
+
+        # Step 1: recursively update all submodules
+        self.logger.info(self.task.emoji, "> recursively update all submodules")  # type: ignore
+        subprocess.run(["git", "submodule", "update", "--remote", "--recursive"], cwd=root_path, check=True)
+
+        # Step 2: checkout branches
+        self.logger.info(self.task.emoji, "> checkout submodules branches")  # type: ignore
+        for submodule_path in map(lambda p: root_path / p, to_sync):
+            # Get branch name
+            cp: subprocess.CompletedProcess[str] = run_with_logs(  # type: ignore
+                ["git", "for-each-ref", "--format='%(refname:short)'", "--points-at", "HEAD", "refs/heads"], cwd=submodule_path, check=False
+            )
+            submodule_log_path = submodule_path.relative_to(root_path).as_posix()
+            if (cp.returncode == 0) and cp.stdout:
+                # Check it out
+                branch_name = cp.stdout.splitlines(keepends=False)[0].strip().strip("'")
+                self.logger.info(self.task.emoji, f">> {submodule_log_path}: {branch_name}")  # type: ignore
+                run_with_logs(["git", "checkout", branch_name], cwd=submodule_path, check=True)
+            else:
+                # Skip unknown branch
+                self.logger.warning(f">> {submodule_log_path}: unknown branch, skipping checkout")  # type: ignore
 
 
 class SubProjectsBuilder(NmkTaskBuilder):
@@ -58,13 +97,13 @@ class SubProjectsBuilder(NmkTaskBuilder):
             built_projects.add(sub_project)
 
             # Some log info...
-            self.logger.info(self.task.emoji, ">> ----------------------------------------------------------------")
-            self.logger.info(self.task.emoji, f">> Building sub-project: {sub_project}")
-            self.logger.info(self.task.emoji, ">> ----------------------------------------------------------------")
+            self.logger.info(self.task.emoji, ">> ----------------------------------------------------------------")  # type: ignore
+            self.logger.info(self.task.emoji, f">> Building sub-project: {sub_project}")  # type: ignore
+            self.logger.info(self.task.emoji, ">> ----------------------------------------------------------------")  # type: ignore
 
             # Handle exclusions
             if any(fnmatch.fnmatch(sub_project, pattern) for pattern in excluded):
-                self.logger.info(self.task.emoji, ">> skipped (excluded)")
+                self.logger.info(self.task.emoji, ">> skipped (excluded)")  # type: ignore
                 continue
 
             # Delegate build

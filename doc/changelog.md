@@ -11,6 +11,8 @@ The fully detailed changelog is also available on [Github](https://github.com/dy
 ## Release 1.2.0
 
 * New **{ref}`${workspaceDisableLocalTasks}<workspaceDisableLocalTasks>`** config item, used to disable all subprojects builds locally (no effect in CI).
+* New **{ref}`${workspaceSubModules}<workspaceSubModules>`** config item listing all project submodules.
+* New **{ref}`workspace.sync<workspace.sync>`** task, used to synchronize all workspace submodules.
 
 ## Release 1.1.0
 
