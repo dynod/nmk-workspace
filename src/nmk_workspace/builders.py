@@ -5,7 +5,6 @@ Nmk workspace plugin builders.
 import fnmatch
 import subprocess
 from pathlib import Path
-from typing import Union
 
 from nmk.model.builder import NmkTaskBuilder
 from nmk.utils import run_with_logs  # type: ignore
@@ -63,7 +62,7 @@ class SubProjectsBuilder(NmkTaskBuilder):
         to_build: list[str],
         to_build_after: list[str],
         excluded: list[str],
-        args: Union[list[str], str],
+        args: list[str] | str,
         ignore_failures: bool = False,
     ):
         """

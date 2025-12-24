@@ -2,7 +2,7 @@ import json
 import shutil
 import subprocess
 from pathlib import Path
-from typing import Any, Union
+from typing import Any
 
 import pytest
 from nmk.tests.tester import NmkBaseTester
@@ -37,7 +37,7 @@ class TestWorkspacePlugin(NmkBaseTester):
             ]
         )
 
-    def run_workspace_task(self, task: str, extra_config: Union[dict[str, Any], None] = None, expected_rc: int = 0):
+    def run_workspace_task(self, task: str, extra_config: dict[str, Any] | None = None, expected_rc: int = 0):
         sub_projects = ["libs/foo", "tools/bar"]
         for sub_project in sub_projects:
             sub_p_folder = self.test_folder / sub_project
