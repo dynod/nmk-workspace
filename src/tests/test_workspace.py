@@ -45,12 +45,18 @@ class TestWorkspacePlugin(NmkBaseTester):
             shutil.copy(self.template(f"{sub_p_folder.name}.yml"), sub_p_folder / "nmk.yml")
 
         p = self.prepare_project("ref_workspace.yml")
-        whole_extra_config = {"workspaceSubProjects": sub_projects, "workspaceSubModules": sub_projects, "workspaceBuildExtraArgs": "--skip setup"}
+        whole_extra_config = {
+            "workspaceSubProjects": sub_projects,
+            "workspaceSubModules": sub_projects,
+            "workspaceBuildExtraArgs": "--skip setup --config gitEnableDirtyCheck=false",
+            "workspaceDisableLocalTasks": False,
+            "gitEnableDirtyCheck": False,
+        }
         if extra_config:
             whole_extra_config.update(extra_config)
         self.nmk(
             p,
-            extra_args=[task, "--skip", "setup", "--config", json.dumps(whole_extra_config), "--config", "workspaceDisableLocalTasks=false"],
+            extra_args=[task, "--skip", "setup", "--config", json.dumps(whole_extra_config)],
             expected_rc=expected_rc,
         )
 
