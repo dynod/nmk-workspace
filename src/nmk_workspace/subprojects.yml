@@ -14,7 +14,7 @@ config:
 
   # Ordered list of subprojects to build first
   workspaceSubProjectsToBuildFirst: []
-  
+
   # Ordered list of subprojects to build after the other subprojects
   workspaceSubProjectsToBuildAfter: []
 
