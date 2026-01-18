@@ -2,13 +2,12 @@
 Nmk workspace plugin config item resolvers.
 """
 
+import re
 from pathlib import Path
-from subprocess import CompletedProcess
-from typing import cast
 
 from nmk.logs import NmkLogger
 from nmk.model.resolver import NmkListConfigResolver
-from nmk.utils import run_with_logs  # type: ignore
+from nmk.utils import run_with_logs
 
 
 class SubProjectsResolver(NmkListConfigResolver):
@@ -30,16 +29,22 @@ class SubProjectsResolver(NmkListConfigResolver):
 
         # Ask git for submodules paths
         root_path = Path(root)
-        cp = cast(
-            CompletedProcess[str], run_with_logs(["git", "submodule", "foreach", "--quiet", "--recursive", "echo $sm_path"], cwd=root_path)
-        )  # Note that $sm_path is a git variable, meaning this syntax is supported both on Linux and Windows
+        cp = run_with_logs(["git", "submodule", "foreach", "--recursive", "echo xxx"], cwd=root_path)
         nmk_models: list[str] = []
-        for candidate in cp.stdout.splitlines(keepends=False):
+        SUB_MODULE_PATTERN = re.compile(r"^.+ \'(.*)\'$")
+        for candidate in map(
+            lambda x: x.group(1) if x is not None else None,
+            filter(lambda x: x is not None, map(lambda x: SUB_MODULE_PATTERN.match(x.strip()), cp.stdout.splitlines(keepends=False))),
+        ):
             # Only keep ones with a default nmk model file
-            sub_project_path = candidate.strip()
-            candidate_path = root_path / sub_project_path / "nmk.yml"
-            if (not only_nmk_projects) or candidate_path.is_file():
-                nmk_models.append(sub_project_path)
+            assert candidate is not None  # for type hinting
+            candidate_path = Path(candidate)
+            if candidate_path.is_absolute() or not (root_path / candidate_path).exists():  # pragma: no cover
+                NmkLogger.debug(f"Sub-project path {candidate_path} is not valid, skipping it.")
+                continue
+            sub_module_path = candidate_path.as_posix()
+            if (not only_nmk_projects) or (root_path / candidate_path / "nmk.yml").is_file():
+                nmk_models.append(sub_module_path)
             else:
-                NmkLogger.debug(f"Sub-project {sub_project_path} does not have a default nmk model file, skipping it.")
+                NmkLogger.debug(f"Sub-project {sub_module_path} does not have a default nmk model file, skipping it.")
         return nmk_models
