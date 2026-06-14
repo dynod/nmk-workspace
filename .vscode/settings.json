@@ -7,12 +7,10 @@
         "editor.defaultFormatter": "charliermarsh.ruff",
         "editor.formatOnSave": true
     },
-    "python.defaultInterpreterPath": "venv/bin/python",
     "python.autoComplete.extraPaths": [
         "src"
     ],
     "cSpell.words": [
-        "isort",
         "noqa",
         "pycache",
         "pylint",
@@ -34,7 +32,7 @@
     },
     "editor.formatOnSave": true,
     "[yaml]": {
-        "editor.defaultFormatter": "prettier.prettier-vscode"
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "task.allowAutomaticTasks": "on",
     "terminal.integrated.defaultProfile.windows": "Git Bash",
