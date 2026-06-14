@@ -12,6 +12,13 @@ config:
       root: ${PROJECTDIR}
       only_nmk_projects: false
 
+  # python subprojects found in git submodules
+  workspacePythonSubProjects:
+    __resolver__: nmk_workspace.resolvers.SubProjectsResolver
+    params:
+      root: ${PROJECTDIR}
+      only_python_projects: true
+
   # Ordered list of subprojects to build first
   workspaceSubProjectsToBuildFirst: []
 
@@ -54,6 +61,13 @@ config:
 
   # Disable local workspace tasks
   workspaceDisableLocalTasks: ${isLocalBuild}
+
+  # Contribute python subprojects to the workspace project file, if any
+  pythonProjectFileItems:
+    tool:
+      uv:
+        workspace:
+          members: ${workspacePythonSubProjects}
 
 tasks:
   # Workspace sync
