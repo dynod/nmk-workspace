@@ -32,10 +32,25 @@ class TestWorkspacePlugin(NmkBaseTester):
         self.nmk(p, extra_args=["--print", "workspaceSubProjects"])
         self.check_logs(
             [
-                "Sub-project some/empty does not have a default nmk model file, skipping it.",
+                "Sub-project some/empty does not have some of expected files (nmk.yml), skipping it.",
                 'Config dump: { "workspaceSubProjects": [ "some/sub/folder" ] }',
             ]
         )
+
+        # Check python subprojects list
+        self.nmk(p, extra_args=["--print", "workspacePythonSubProjects"])
+        self.check_logs(
+            [
+                "Sub-project some/empty does not have some of expected files (nmk.yml, pyproject.toml), skipping it.",
+                'Config dump: { "workspacePythonSubProjects": [ "some/sub/folder" ] }',
+            ]
+        )
+
+        # Generate python project file
+        self.nmk(p, extra_args=["py.project"])
+        assert (self.test_folder / "pyproject.toml").is_file()
+        project_file_content = (self.test_folder / "pyproject.toml").read_text().splitlines()
+        assert 'members = ["some/sub/folder"]' in project_file_content
 
     def run_workspace_task(self, task: str, extra_config: dict[str, Any] | None = None, expected_rc: int = 0):
         sub_projects = ["libs/foo", "tools/bar"]
