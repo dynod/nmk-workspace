@@ -21,6 +21,14 @@ config:
   pythonProjectFileItems:
     project:
       description: VWorkspace handling plugin for nmk build system
+      entry-points:
+        buildenv_template: # buildenv >=2 template
+          nmk.workspace: nmk_workspace._buildenv.template:NmkWorkspaceProjectTemplate
+    tool:
+      coverage:
+        run:
+          omit:
+            - src/nmk_workspace/_buildenv/template.py
 
   # Github issues logged in nmk project
   githubIssuesRepo: nmk

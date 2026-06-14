@@ -10,9 +10,10 @@ The fully detailed changelog is also available on [Github](https://github.com/dy
 
 ## Release 1.3.0
 
-- Updated documentation theme
+- Updated documentation theme.
 - New **{ref}`${workspacePythonSubProjects}<workspacePythonSubProjects>`** config item listing all python subprojects.
 - Added {ref}`uv workspace members<uv-contrib>` generation in workspace-level **`pyproject.toml`** file.
+- Add template support for buildenv 2.
 
 ## Release 1.2.0
 
