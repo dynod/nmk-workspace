@@ -4,8 +4,8 @@
         "tamasfe.even-better-toml",
         "charliermarsh.ruff",
         "ms-python.python",
-        "ms-vscode.live-server",
-        "prettier.prettier-vscode",
+        "jebbs.plantuml",
+        "esbenp.prettier-vscode",
         "eamodio.gitlens",
         "streetsidesoftware.code-spell-checker"
     ]
