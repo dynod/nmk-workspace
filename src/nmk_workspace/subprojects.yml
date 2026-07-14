@@ -45,6 +45,7 @@ config:
 
   # Enabling options per task
   workspaceBuildEnabled:
+    sync: true
     clean: true
     setup: true
     build: true
@@ -62,6 +63,9 @@ config:
   # Disable local workspace tasks
   workspaceDisableLocalTasks: ${isLocalBuild}
 
+  # Workspace syn enablement
+  workspaceSyncEnabled: true
+
   # Contribute python subprojects to the workspace project file, if any
   pythonProjectFileItems:
     tool:
@@ -75,6 +79,7 @@ tasks:
     description: Sync workspace projects
     emoji: ":books:.:arrows_counterclockwise:"
     builder: nmk_workspace.builders.SubProjectsSyncBuilder
+    if: ${workspaceSyncEnabled}
     params:
       root: ${PROJECTDIR}
       to_sync: ${workspaceSubModules}
