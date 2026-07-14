@@ -8,6 +8,10 @@ Only interface and important behavior changes are listed here.
 The fully detailed changelog is also available on [Github](https://github.com/dynod/nmk-workspace/releases)
 ```
 
+## Release 1.4.0
+
+- New **{ref}`${workspaceSyncEnabled}<workspaceSyncEnabled>`** config item enabling the **{ref}`workspace.sync<workspace.sync>`** task.
+
 ## Release 1.3.0
 
 - Updated documentation theme.

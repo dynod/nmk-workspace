@@ -186,3 +186,27 @@ This dict allows to tell builder to ignore any failures occurring when building 
 This item disables all subprojects builds if the project is built locally (no effect in CI).
 
 _<span style="color:green">Added in version 1.2.0</span>_
+
+---
+
+## Workspace synchronization
+
+(workspaceSyncEnabled)=
+
+### **`workspaceSyncEnabled`** -- workspace sync enablement
+
+| Type | Default value |
+| ---- | ------------- |
+| bool | true          |
+
+This item is used to enable the **{ref}`workspace.sync<workspace.sync>`** task.
+
+This item may be usefull when the **{ref}`workspace.sync<workspace.sync>`** task is somehow added as a dependency of the [**`setup`**](https://nmk-base.readthedocs.io/en/stable/tasks.html#setup-task) task, and the user doesn't expect to always trigger the workspace sync locally but only in CI.
+
+In this case, just override the definition:
+
+```yaml
+workspaceSyncEnabled: ${isCIBuild}
+```
+
+_<span style="color:green">Added in version 1.4.0</span>_

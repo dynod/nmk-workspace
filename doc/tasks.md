@@ -149,10 +149,11 @@ This task iterates on specified subprojects, and call their own [**`clean`**](ht
 
 This task triggers a recursive submodules update process, and checks out the corresponding branch (i.e. the remote branch identified in **.gitmodules** root file) for each submodule.
 
-| Property | Value/description                                                                           |
-| -------- | ------------------------------------------------------------------------------------------- |
-| builder  | {py:class}`nmk_workspace.builders.SubProjectsSyncBuilder`                                   |
-| root     | [**`${PROJECTDIR}`**](https://nmk.readthedocs.io/en/stable/file.html#built-in-config-items) |
-| to_sync  | {ref}`${workspaceSubModules}<workspaceSubModules>`                                          |
+| Property | Value/description                                                                                                  |
+| -------- | ------------------------------------------------------------------------------------------------------------------ |
+| builder  | {py:class}`nmk_workspace.builders.SubProjectsSyncBuilder`                                                          |
+| if       | {ref}`${workspaceSyncEnabled}<workspaceSyncEnabled>`<br/>_<span style="color:green">Added in version 1.4.0</span>_ |
+| root     | [**`${PROJECTDIR}`**](https://nmk.readthedocs.io/en/stable/file.html#built-in-config-items)                        |
+| to_sync  | {ref}`${workspaceSubModules}<workspaceSubModules>`                                                                 |
 
 _<span style="color:green">Added in version 1.2.0</span>_
