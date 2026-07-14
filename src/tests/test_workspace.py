@@ -100,9 +100,29 @@ class TestWorkspacePlugin(NmkBaseTester):
         self.run_workspace_task("clean", {"workspaceSubProjectsToExclude": ["libs/foo"]})
         self.check_logs(">> skipped (excluded)")
 
-    def test_subprojects_sync(self):
+    def test_subprojects_sync(self, monkeypatch: pytest.MonkeyPatch):
+        real_run = subprocess.run
+        checkout_args: list[list[str]] = []
+
+        def fake_git(args: list[str], *other_args: Any, **kwargs: Any) -> subprocess.CompletedProcess[str]:
+            if args[:2] == ["git", "for-each-ref"]:
+                return subprocess.CompletedProcess(args, 0, " origin/foo", "")
+            if args[:2] == ["git", "checkout"]:
+                checkout_args.append(list(args))
+                return subprocess.CompletedProcess(args, 0, "", "")
+            return real_run(args, *other_args, **kwargs)  # type: ignore
+
+        monkeypatch.setattr(subprocess, "run", fake_git)
+
         self.run_workspace_task("workspace.sync")
-        self.check_logs(["INFO 📚.🔄 - >> libs/foo: ", "INFO 📚.🔄 - >> tools/bar: "])
+        self.check_logs(
+            [
+                "INFO 📚.🔄 - >> libs/foo: foo",
+                "INFO 📚.🔄 - >> tools/bar: foo",
+            ]
+        )
+        assert len(checkout_args) == 2
+        assert all(args == ["git", "checkout", "-B", "foo", "origin/foo"] for args in checkout_args)
 
     def test_subprojects_sync_unknown_branch(self, monkeypatch: pytest.MonkeyPatch):
         real_run = subprocess.run
@@ -115,4 +135,27 @@ class TestWorkspacePlugin(NmkBaseTester):
         monkeypatch.setattr(subprocess, "run", fake_git)
 
         self.run_workspace_task("workspace.sync")
-        self.check_logs(["WARNING ❗ - >> libs/foo: unknown branch, skipping checkout", "WARNING ❗ - >> tools/bar: unknown branch, skipping checkout"])
+        self.check_logs(
+            [
+                "WARNING ❗ - >> libs/foo: failed to determine branch, skipping checkout",
+                "WARNING ❗ - >> tools/bar: failed to determine branch, skipping checkout",
+            ]
+        )
+
+    def test_subprojects_sync_multiple_branches(self, monkeypatch: pytest.MonkeyPatch):
+        real_run = subprocess.run
+
+        def fake_git(args: list[str], *other_args: Any, **kwargs: Any) -> subprocess.CompletedProcess[str]:
+            if args[:2] == ["git", "for-each-ref"]:
+                return subprocess.CompletedProcess(args, 0, " origin/foo\n origin/bar\n", "")
+            return real_run(args, *other_args, **kwargs)  # type: ignore
+
+        monkeypatch.setattr(subprocess, "run", fake_git)
+
+        self.run_workspace_task("workspace.sync")
+        self.check_logs(
+            [
+                "WARNING ❗ - >> libs/foo: ambiguous branches (origin/foo, origin/bar), skipping checkout",
+                "WARNING ❗ - >> tools/bar: ambiguous branches (origin/foo, origin/bar), skipping checkout",
+            ]
+        )
