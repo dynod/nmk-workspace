@@ -11,6 +11,7 @@ The fully detailed changelog is also available on [Github](https://github.com/dy
 ## Release 1.4.0
 
 - New **{ref}`${workspaceSyncEnabled}<workspaceSyncEnabled>`** config item enabling the **{ref}`workspace.sync<workspace.sync>`** task.
+- Fixed workspace synchronization, using `git checkout -B ...` to refresh existing local branches
 
 ## Release 1.3.0
 

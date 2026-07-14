@@ -28,24 +28,35 @@ class SubProjectsSyncBuilder(NmkTaskBuilder):
 
         # Step 1: recursively update all submodules
         self.logger.info(self.task.emoji, "> recursively update all submodules")  # type: ignore
-        subprocess.run(["git", "submodule", "update", "--remote", "--recursive"], cwd=root_path, check=True)
+        sync_cmd = ["git", "submodule", "update", "--remote", "--recursive"]
+        self.logger.debug("Running command: " + " ".join(sync_cmd))
+        subprocess.run(sync_cmd, cwd=root_path, check=True)
 
         # Step 2: checkout branches
         self.logger.info(self.task.emoji, "> checkout submodules branches")  # type: ignore
         for submodule_path in map(lambda p: root_path / p, to_sync):
             # Get branch name
             cp: subprocess.CompletedProcess[str] = run_with_logs(  # type: ignore
-                ["git", "for-each-ref", "--format='%(refname:short)'", "--points-at", "HEAD", "refs/heads"], cwd=submodule_path, check=False
+                ["git", "for-each-ref", "--format='%(refname:short)'", "--points-at", "HEAD", "refs/remotes"], cwd=submodule_path, check=False
             )
             submodule_log_path = submodule_path.relative_to(root_path).as_posix()
             if (cp.returncode == 0) and cp.stdout:
-                # Check it out
-                branch_name = cp.stdout.splitlines(keepends=False)[0].strip().strip("'")
-                self.logger.info(self.task.emoji, f">> {submodule_log_path}: {branch_name}")  # type: ignore
-                run_with_logs(["git", "checkout", branch_name], cwd=submodule_path, check=True)
+                # Parse branch name, ignoring remote HEAD
+                branch_names = [b.strip().strip("'") for b in cp.stdout.splitlines(keepends=False) if "HEAD" not in b]
+                self.logger.debug(f"Candidate remote branches for {submodule_log_path}: {branch_names}")
+                if len(branch_names) != 1:
+                    self.logger.warning(f">> {submodule_log_path}: ambiguous branches ({', '.join(branch_names)}), skipping checkout")
+                else:
+                    # Prepare branch names
+                    remote_branch_name = branch_names[0]
+                    local_branch_name = remote_branch_name.split("/")[-1]
+                    self.logger.info(self.task.emoji, f">> {submodule_log_path}: {local_branch_name}")  # type: ignore
+
+                    # Check it out
+                    run_with_logs(["git", "checkout", "-B", local_branch_name, remote_branch_name], cwd=submodule_path, check=True)
             else:
                 # Skip unknown branch
-                self.logger.warning(f">> {submodule_log_path}: unknown branch, skipping checkout")  # type: ignore
+                self.logger.warning(f">> {submodule_log_path}: failed to determine branch, skipping checkout")
 
 
 class SubProjectsBuilder(NmkTaskBuilder):
