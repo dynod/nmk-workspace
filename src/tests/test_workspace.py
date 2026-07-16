@@ -106,7 +106,7 @@ class TestWorkspacePlugin(NmkBaseTester):
 
         def fake_git(args: list[str], *other_args: Any, **kwargs: Any) -> subprocess.CompletedProcess[str]:
             if args[:2] == ["git", "for-each-ref"]:
-                return subprocess.CompletedProcess(args, 0, " origin/foo", "")
+                return subprocess.CompletedProcess(args, 0, " 'origin/foo'\n origin\n HEAD", "")
             if args[:2] == ["git", "checkout"]:
                 checkout_args.append(list(args))
                 return subprocess.CompletedProcess(args, 0, "", "")

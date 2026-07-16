@@ -8,6 +8,10 @@ Only interface and important behavior changes are listed here.
 The fully detailed changelog is also available on [Github](https://github.com/dynod/nmk-workspace/releases)
 ```
 
+## Release 1.5.0
+
+- New **{ref}`${workspaceRemoteName}<workspaceRemoteName>`** config item to help filtering remote branches when running the **{ref}`workspace.sync<workspace.sync>`** task.
+
 ## Release 1.4.0
 
 - New **{ref}`${workspaceSyncEnabled}<workspaceSyncEnabled>`** config item enabling the **{ref}`workspace.sync<workspace.sync>`** task.
