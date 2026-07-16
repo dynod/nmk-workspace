@@ -15,12 +15,13 @@ class SubProjectsSyncBuilder(NmkTaskBuilder):
     Builder for syncing sub-projects in the workspace tree.
     """
 
-    def build(self, root: str, to_sync: list[str]):  # type: ignore
+    def build(self, root: str, to_sync: list[str], remote_name: str):  # type: ignore
         """
         Synchronizes all sub-modules on their git remote branch (the one declared in the .gitmodules file).
 
         :param root: Root path of the workspace
         :param to_sync: List of sub-modules to sync
+        :param remote_name: Name of the remote to use when checking out branches (e.g., "origin")
         """
 
         # Build root path
@@ -40,16 +41,17 @@ class SubProjectsSyncBuilder(NmkTaskBuilder):
                 ["git", "for-each-ref", "--format='%(refname:short)'", "--points-at", "HEAD", "refs/remotes"], cwd=submodule_path, check=False
             )
             submodule_log_path = submodule_path.relative_to(root_path).as_posix()
+            remote_prefix = f"{remote_name}/"
             if (cp.returncode == 0) and cp.stdout:
-                # Parse branch name, ignoring remote HEAD
-                branch_names = [b.strip().strip("'") for b in cp.stdout.splitlines(keepends=False) if "HEAD" not in b]
+                # Parse branch name, filtering only those with remote name prefix
+                branch_names = list(filter(lambda b: b.startswith(remote_prefix), map(lambda b: b.strip().strip("'"), cp.stdout.splitlines(keepends=False))))
                 self.logger.debug(f"Candidate remote branches for {submodule_log_path}: {branch_names}")
                 if len(branch_names) != 1:
                     self.logger.warning(f">> {submodule_log_path}: ambiguous branches ({', '.join(branch_names)}), skipping checkout")
                 else:
                     # Prepare branch names
                     remote_branch_name = branch_names[0]
-                    local_branch_name = remote_branch_name.split("/")[-1]
+                    local_branch_name = branch_names[0][len(remote_prefix) :]
                     self.logger.info(self.task.emoji, f">> {submodule_log_path}: {local_branch_name}")  # type: ignore
 
                     # Check it out

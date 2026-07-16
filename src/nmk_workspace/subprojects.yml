@@ -45,7 +45,6 @@ config:
 
   # Enabling options per task
   workspaceBuildEnabled:
-    sync: true
     clean: true
     setup: true
     build: true
@@ -66,6 +65,9 @@ config:
   # Workspace syn enablement
   workspaceSyncEnabled: true
 
+  # Remote name when computing branches
+  workspaceRemoteName: origin
+
   # Contribute python subprojects to the workspace project file, if any
   pythonProjectFileItems:
     tool:
@@ -83,6 +85,7 @@ tasks:
     params:
       root: ${PROJECTDIR}
       to_sync: ${workspaceSubModules}
+      remote_name: ${workspaceRemoteName}
 
   # Workspace clean
   workspace.clean:

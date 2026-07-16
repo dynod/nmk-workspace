@@ -54,7 +54,7 @@ _<span style="color:green">Added in version 1.3.0</span>_
 
 ## Subprojects building
 
-This configuration items are used to parameterize how workspace subprojects are built.
+These configuration items are used to parameterize how workspace subprojects are built.
 
 ---
 
@@ -191,6 +191,10 @@ _<span style="color:green">Added in version 1.2.0</span>_
 
 ## Workspace synchronization
 
+These configuration items are used to handle workspace subprojects synchronization
+
+---
+
 (workspaceSyncEnabled)=
 
 ### **`workspaceSyncEnabled`** -- workspace sync enablement
@@ -210,3 +214,17 @@ workspaceSyncEnabled: ${isCIBuild}
 ```
 
 _<span style="color:green">Added in version 1.4.0</span>_
+
+---
+
+(workspaceRemoteName)=
+
+### **`workspaceRemoteName`** -- remote branches prefix
+
+| Type | Default value |
+| ---- | ------------- |
+| str  | "origin"      |
+
+When parsing remote branches name for submodules checkout (as part of the **{ref}`workspace.sync<workspace.sync>`** task), this item is used to find the remote branch pointing at updated commit.
+
+_<span style="color:green">Added in version 1.5.0</span>_
