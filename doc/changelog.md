@@ -8,6 +8,11 @@ Only interface and important behavior changes are listed here.
 The fully detailed changelog is also available on [Github](https://github.com/dynod/nmk-workspace/releases)
 ```
 
+## Release 1.6.0
+
+- New **{ref}`${workspacePythonSubProjectsPackages}<workspacePythonSubProjectsPackages>`** config item listing all python subprojects package names.
+- Added {ref}`workspace option<uv-contrib>` generation in workspace-level **`pyproject.toml`** file.
+
 ## Release 1.5.0
 
 - New **{ref}`${workspaceRemoteName}<workspaceRemoteName>`** config item to help filtering remote branches when running the **{ref}`workspace.sync<workspace.sync>`** task.

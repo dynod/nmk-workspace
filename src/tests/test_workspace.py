@@ -34,7 +34,8 @@ class TestWorkspacePlugin(NmkBaseTester):
             [
                 "Sub-project some/empty does not have some of expected files (nmk.yml), skipping it.",
                 'Config dump: { "workspaceSubProjects": [ "some/sub/folder" ] }',
-            ]
+            ],
+            check_order=True,
         )
 
         # Check python subprojects list
@@ -43,7 +44,14 @@ class TestWorkspacePlugin(NmkBaseTester):
             [
                 "Sub-project some/empty does not have some of expected files (nmk.yml, pyproject.toml), skipping it.",
                 'Config dump: { "workspacePythonSubProjects": [ "some/sub/folder" ] }',
-            ]
+            ],
+            check_order=True,
+        )
+
+        # Check python subprojects packages list
+        self.nmk(p, extra_args=["--print", "workspacePythonSubProjectsPackages"])
+        self.check_logs(
+            ['Config dump: { "workspacePythonSubProjectsPackages": [ "nmk-workspace" ] }'],
         )
 
         # Generate python project file
