@@ -43,8 +43,12 @@ class SubProjectsSyncBuilder(NmkTaskBuilder):
             submodule_log_path = submodule_path.relative_to(root_path).as_posix()
             remote_prefix = f"{remote_name}/"
             if (cp.returncode == 0) and cp.stdout:
-                # Parse branch name, filtering only those with remote name prefix
-                branch_names = list(filter(lambda b: b.startswith(remote_prefix), map(lambda b: b.strip().strip("'"), cp.stdout.splitlines(keepends=False))))
+                # Parse branch name, filtering only those with remote name prefix and which are not a HEAD
+                branch_names = list(
+                    filter(
+                        lambda b: b.startswith(remote_prefix) and ("HEAD" not in b), map(lambda b: b.strip().strip("'"), cp.stdout.splitlines(keepends=False))
+                    )
+                )
                 self.logger.debug(f"Candidate remote branches for {submodule_log_path}: {branch_names}")
                 if len(branch_names) != 1:
                     self.logger.warning(f">> {submodule_log_path}: ambiguous branches ({', '.join(branch_names)}), skipping checkout")

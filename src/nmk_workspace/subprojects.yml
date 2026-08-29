@@ -19,6 +19,13 @@ config:
       root: ${PROJECTDIR}
       only_python_projects: true
 
+  # Python packages names (read from pyproject.toml files)
+  workspacePythonSubProjectsPackages:
+    __resolver__: nmk_workspace.resolvers.PythonPackagesResolver
+    params:
+      root: ${PROJECTDIR}
+      python_subprojects: ${workspacePythonSubProjects}
+
   # Ordered list of subprojects to build first
   workspaceSubProjectsToBuildFirst: []
 
@@ -74,6 +81,8 @@ config:
       uv:
         workspace:
           members: ${workspacePythonSubProjects}
+  pythonProjectFileFragments:
+    - ${BASEDIR}/_templates/uv_workspace.toml.jinja
 
 tasks:
   # Workspace sync
